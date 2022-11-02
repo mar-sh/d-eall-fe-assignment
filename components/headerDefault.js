@@ -1,7 +1,18 @@
 import React, { useState } from "react";
+import { useRouter } from "next/router";
 import NextLink from "next/link";
 
+const menu = [
+  {
+    id: 1,
+    name: "Categories",
+    path: "/categories",
+  },
+  { id: 2, name: "My Bookmark", path: "/bookmark" },
+];
+
 const HeaderDefault = () => {
+  const { route } = useRouter();
   const [expandMobileMenu, setExpandMobileMenu] = useState(false);
 
   return (
@@ -39,22 +50,21 @@ const HeaderDefault = () => {
         }`}
       >
         <ul className="list-reset lg:flex justify-start flex-1 items-center">
-          <li className="mr-3">
-            <NextLink
-              className="inline-block py-2 px-4 text-white no-underline"
-              href="/categories"
-            >
-              Categories
-            </NextLink>
-          </li>
-          <li className="mr-3">
-            <NextLink
-              className="inline-block text-gray-600 no-underline hover:text-gray-200 hover:text-underline py-2 px-4"
-              href="/bookmark"
-            >
-              My Bookmark
-            </NextLink>
-          </li>
+          {menu.map((item) => (
+            <li className="mr-3" key={item.id}>
+              <NextLink
+                exact
+                className={`inline-block py-2 px-4 ${
+                  route === item.path
+                    ? "text-white text-bold text-lg hover:none"
+                    : " text-gray-200 hover:text-gray-300"
+                }`}
+                href={item.path}
+              >
+                {item.name}
+              </NextLink>
+            </li>
+          ))}
         </ul>
       </div>
     </nav>
