@@ -22,19 +22,34 @@ function Books(props) {
   const { query } = useRouter();
 
   const [queries, setQueries] = useState(query);
+  const [searchValue, setSearchValue] = useState("");
 
   const { isLoading, data } = useQuery({
     queryKey: ["books", queries.categoryId, queries.size, queries.page],
     queryFn: () => fetchBooks(new URLSearchParams(queries).toString()),
     initialData: props.books,
     keepPreviousData: true,
+    select: (books) => {
+      return books.filter((book) => {
+        return (
+          book.title.includes(searchValue) ||
+          book.authors.some((author) => author.includes(searchValue))
+        );
+      });
+    },
   });
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center md:flex-row md:justify-between">
-        <InputFilter />
-        <Pagination currentPage={Number(queries.page) + 1} />
+        <InputFilter
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+        />
+        <Pagination
+          currentPage={Number(queries.page) + 1}
+          disabled={Boolean(searchValue)}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">

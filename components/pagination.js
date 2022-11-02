@@ -1,10 +1,11 @@
 import React from "react";
 
-function Pagination({ onNextPage, onPreviousPage, currentPage }) {
+function Pagination({ onNextPage, onPreviousPage, currentPage, disabled }) {
   return (
     <div className="flex items-center">
       <button
         onClick={onPreviousPage}
+        disabled={disabled || Number(currentPage) - 1 < 1}
         className="inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
         <svg
@@ -23,9 +24,10 @@ function Pagination({ onNextPage, onPreviousPage, currentPage }) {
         Previous Page
       </button>
 
-      <span className="mr-3 text-lg text-bold">Page {currentPage + 1}</span>
+      <span className="mr-3 text-lg text-bold">Page {currentPage}</span>
       <button
         onClick={onNextPage}
+        disabled={disabled}
         className="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
       >
         Next Page
