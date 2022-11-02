@@ -1,10 +1,9 @@
 import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
+import HeroSection from "../components/heroSection.js";
 
 export default function Home() {
   return (
-    <div className={styles.container}>
+    <div className="min-h-screen bg-white-100">
       <Head>
         <title>B3K3N</title>
         <meta name="description" content="Browse books" />
@@ -12,7 +11,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className="text-3xl font-bold  text-red-800">Home page</h1>
+        <HeroSection />
       </main>
     </div>
   );
