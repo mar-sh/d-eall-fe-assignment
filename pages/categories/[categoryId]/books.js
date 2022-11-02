@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 
+import Card from "../../../components/card";
+import Pagination from "../../../components/pagination";
+
 import { BASE_URL } from "../../../utils/config";
 
 async function fetchBooks(queries) {
@@ -27,27 +30,18 @@ function Books(props) {
   });
 
   return (
-    <div>
-      <button
-        onClick={() =>
-          setQueries((prev) => ({ ...queries, page: Number(prev.page) + 1 }))
-        }
-      >
-        Next Page
-      </button>
-      <button
-        onClick={() =>
-          setQueries((prev) => ({
-            ...queries,
-            page: Math.max(Number(prev.page) - 1, 0),
-          }))
-        }
-      >
-        Prev Page
-      </button>
-      <p>{data.length}</p>
+    <div className="flex flex-col">
+      <div className="flex ">
+        <Pagination currentPage={Number(queries.page) + 1} />
+      </div>
 
-      {JSON.stringify(data, null, 2)}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">
+        {data.map((book) => (
+          <div className="p-3" key={book.id}>
+            <Card book={book} />
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
