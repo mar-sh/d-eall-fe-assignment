@@ -24,6 +24,14 @@ function Books(props) {
   const [queries, setQueries] = useState(query);
   const [searchValue, setSearchValue] = useState("");
 
+  const onNextPage = () => {
+    setQueries((prev) => ({ ...prev, page: Number(queries.page) + 1 }));
+  };
+
+  const onPreviousPage = () => {
+    setQueries((prev) => ({ ...prev, page: Number(queries.page) - 1 }));
+  };
+
   const { isLoading, data } = useQuery({
     queryKey: ["books", queries.categoryId, queries.size, queries.page],
     queryFn: () => fetchBooks(new URLSearchParams(queries).toString()),
@@ -47,6 +55,8 @@ function Books(props) {
           onChange={(e) => setSearchValue(e.target.value)}
         />
         <Pagination
+          onNextPage={onNextPage}
+          onPreviousPage={onPreviousPage}
           currentPage={Number(queries.page) + 1}
           disabled={Boolean(searchValue)}
         />
