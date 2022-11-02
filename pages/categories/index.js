@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
+import CategoryPicker from "../../components/categoryPicker";
 import { BASE_URL } from "../../utils/config";
 
 async function fetchCategories() {
@@ -16,7 +17,11 @@ function CategoriesPage(props) {
     queryFn: fetchCategories,
     initialData: props.categories,
   });
-  return <>{data && JSON.stringify(data, null, 4)}</>;
+  return (
+    <>
+      <CategoryPicker categories={data} />
+    </>
+  );
 }
 
 export async function getStaticProps() {
