@@ -1,5 +1,5 @@
 import React from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
 
 import CategoryPicker from "../../components/categoryPicker";
 import { BASE_URL } from "../../utils/config";
@@ -11,11 +11,10 @@ async function fetchCategories() {
   return data;
 }
 
-function CategoriesPage(props) {
-  const { data, isFetching, error } = useQuery({
+function CategoriesPage() {
+  const { data } = useQuery({
     queryKey: ["categories"],
     queryFn: fetchCategories,
-    initialData: props.categories,
   });
   return (
     <>
@@ -25,9 +24,14 @@ function CategoriesPage(props) {
 }
 
 export async function getStaticProps() {
-  const categories = await fetchCategories();
+  const queryClient = new QueryClient();
 
-  return { props: { categories } };
+  await queryClient.prefetchQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+  });
+
+  return { props: { dehydratedState: dehydrate(queryClient) } };
 }
 
 export default CategoriesPage;
