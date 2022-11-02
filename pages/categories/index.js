@@ -28,7 +28,7 @@ function CategoriesPage() {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
