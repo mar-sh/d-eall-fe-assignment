@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Cookie from "js-cookie";
 import { useRouter } from "next/router";
 import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
 
@@ -7,8 +6,8 @@ import Card from "../../../components/card";
 import Pagination from "../../../components/pagination";
 import InputFilter from "../../../components/inputFilter";
 
+import useBookmarkStore from "../../../store/bookmark";
 import { BASE_URL } from "../../../utils/config";
-import parseCookie from "../../../utils/parseCookie";
 
 async function fetchBooks(queries) {
   const fullUrl = `${BASE_URL}/api/books?${queries}`;
@@ -23,11 +22,11 @@ async function fetchBooks(queries) {
 function Books(props) {
   const { query } = useRouter();
 
+  const bookmark = useBookmarkStore((state) => state.bookmarks);
+  const addToBookmark = useBookmarkStore((state) => state.addToBookmark);
+
   const [queries, setQueries] = useState(query);
   const [searchValue, setSearchValue] = useState("");
-  const [bookmark, setBookmark] = useState(() =>
-    JSON.parse(props.initialBookmark)
-  );
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ["books", queries.categoryId, queries.page],
@@ -60,17 +59,7 @@ function Books(props) {
       cover_url,
       authors,
     };
-
-    if (bookmark && bookmark.length > 0) {
-      const addedBookmark = bookmark.concat(bookmarked);
-
-      setBookmark(addedBookmark);
-
-      Cookie.set("bookmark", JSON.stringify(addedBookmark));
-    } else {
-      setBookmark([bookmarked]);
-      Cookie.set("bookmark", JSON.stringify([bookmarked]));
-    }
+    addToBookmark(bookmarked);
   };
 
   const renderResult = () => {
@@ -138,12 +127,9 @@ export async function getServerSideProps({ req, query }) {
     queryFn: () => fetchBooks(queries.toString()),
   });
 
-  const cookies = parseCookie(req);
-
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
-      initialBookmark: cookies.bookmark || null,
     },
   };
 }

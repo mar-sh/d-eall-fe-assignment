@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import parseCookie from "../../utils/parseCookie";
+import dynamic from "next/dynamic";
+import React from "react";
 
+import useBookmarkStore from "../../store/bookmark";
 import Card from "../../components/card";
 
-const BookmarkPage = (props) => {
-  const bookmark = JSON.parse(props.initialBookmark);
+const BookmarkPage = () => {
+  const bookmark = useBookmarkStore((state) => state.bookmarks);
 
-  if (!bookmark)
+  if (!bookmark.length)
     return <div>You don&lsquot have any books in your bookmark section.</div>;
 
   return (
@@ -27,14 +28,8 @@ const BookmarkPage = (props) => {
   );
 };
 
-export function getServerSideProps({ req }) {
-  const cookie = parseCookie(req);
+const DynamicBookmarkPage = dynamic(() => Promise.resolve(BookmarkPage), {
+  ssr: false,
+});
 
-  return {
-    props: {
-      initialBookmark: cookie.bookmark || null,
-    },
-  };
-}
-
-export default BookmarkPage;
+export default DynamicBookmarkPage;
