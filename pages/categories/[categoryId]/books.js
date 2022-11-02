@@ -52,13 +52,13 @@ function Books(props) {
   };
 
   const onBookmark = (book) => {
-    const { id, title, description, cover_url, author } = book;
+    const { id, title, description, cover_url, authors } = book;
     const bookmarked = {
       id,
       title,
       description,
       cover_url,
-      author,
+      authors,
     };
 
     if (bookmark && bookmark.length > 0) {
