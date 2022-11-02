@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Cookie from "js-cookie";
 import { useRouter } from "next/router";
 import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
 
@@ -7,6 +8,7 @@ import Pagination from "../../../components/pagination";
 import InputFilter from "../../../components/inputFilter";
 
 import { BASE_URL } from "../../../utils/config";
+import parseCookie from "../../../utils/parseCookie";
 
 async function fetchBooks(queries) {
   const fullUrl = `${BASE_URL}/api/books?${queries}`;
@@ -18,21 +20,14 @@ async function fetchBooks(queries) {
   return data;
 }
 
-function Books() {
+function Books(props) {
   const { query } = useRouter();
 
   const [queries, setQueries] = useState(query);
   const [searchValue, setSearchValue] = useState("");
+  const [bookmark, setBookmark] = useState(JSON.parse(props.initialBookmark));
 
-  const onNextPage = () => {
-    setQueries((prev) => ({ ...prev, page: Number(queries.page) + 1 }));
-  };
-
-  const onPreviousPage = () => {
-    setQueries((prev) => ({ ...prev, page: Number(queries.page) - 1 }));
-  };
-
-  const { isLoading, isError, isSuccess, data } = useQuery({
+  const { isLoading, isError, data } = useQuery({
     queryKey: ["books", queries.categoryId, queries.page],
     queryFn: () => fetchBooks(new URLSearchParams(queries).toString()),
 
@@ -45,6 +40,27 @@ function Books() {
       });
     },
   });
+
+  const onNextPage = () => {
+    setQueries((prev) => ({ ...prev, page: Number(queries.page) + 1 }));
+  };
+
+  const onPreviousPage = () => {
+    setQueries((prev) => ({ ...prev, page: Number(queries.page) - 1 }));
+  };
+
+  const onBookmark = (book) => {
+    if (props.initialBookmark) {
+      const bookmark = JSON.parse(props.initialBookmark);
+      const addedBookmark = [...bookmark, book];
+
+      setBookmark(addedBookmark);
+      Cookie.set("bookmark", JSON.stringify(addedBookmark));
+    } else {
+      setBookmark([book]);
+      Cookie.set("bookmark", JSON.stringify([book]));
+    }
+  };
 
   const renderResult = () => {
     if (isLoading) {
@@ -60,13 +76,19 @@ function Books() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">
           {data.map((book) => (
             <div className="p-3" key={book.id}>
-              <Card book={book} />
+              <Card
+                book={book}
+                bookmarked={Boolean(
+                  (bookmark || []).find((item) => item.id === book.id)
+                )}
+                onBookmark={() => onBookmark(book)}
+              />
             </div>
           ))}
         </div>
       );
     } else {
-      return <div>It seems like the results are empty</div>;
+      return <div>No results were returned.</div>;
     }
   };
 
@@ -89,7 +111,7 @@ function Books() {
   );
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ req, query }) {
   const queryClient = new QueryClient();
 
   const { categoryId, page, size } = query;
@@ -105,7 +127,14 @@ export async function getServerSideProps({ query }) {
     queryFn: () => fetchBooks(queries.toString()),
   });
 
-  return { props: { dehydratedState: dehydrate(queryClient) } };
+  const cookies = parseCookie(req);
+
+  return {
+    props: {
+      dehydratedState: dehydrate(queryClient),
+      initialBookmark: cookies.bookmark || null,
+    },
+  };
 }
 
 export default Books;
