@@ -6,5 +6,5 @@ export default function handler(req, res) {
   return fetch(`${BASE_API_URL}/fee-assessment-books?${queries.toString()}`)
     .then((response) => response.json())
     .then((data) => res.json(data))
-    .catch(() => []); // to prevent the site from breaking since the provided API does not have error response
+    .catch(() => res.json([])); // to prevent the site from breaking since the provided API does not have error response
 }

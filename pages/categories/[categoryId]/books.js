@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
 
 import Card from "../../../components/card";
 import Pagination from "../../../components/pagination";
@@ -18,7 +18,7 @@ async function fetchBooks(queries) {
   return data;
 }
 
-function Books(props) {
+function Books() {
   const { query } = useRouter();
 
   const [queries, setQueries] = useState(query);
@@ -32,11 +32,10 @@ function Books(props) {
     setQueries((prev) => ({ ...prev, page: Number(queries.page) - 1 }));
   };
 
-  const { isLoading, data } = useQuery({
-    queryKey: ["books", queries.categoryId, queries.size, queries.page],
+  const { isLoading, isError, isSuccess, data } = useQuery({
+    queryKey: ["books", queries.categoryId, queries.page],
     queryFn: () => fetchBooks(new URLSearchParams(queries).toString()),
-    initialData: props.books,
-    keepPreviousData: true,
+
     select: (books) => {
       return books.filter((book) => {
         return (
@@ -46,6 +45,30 @@ function Books(props) {
       });
     },
   });
+
+  const renderResult = () => {
+    if (isLoading) {
+      return <div>Loading...</div>;
+    }
+
+    if (isError) {
+      return <div>Something has gone wrong. Please try again later</div>;
+    }
+
+    if (data.length > 0) {
+      return (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">
+          {data.map((book) => (
+            <div className="p-3" key={book.id}>
+              <Card book={book} />
+            </div>
+          ))}
+        </div>
+      );
+    } else {
+      return <div>It seems like the results are empty</div>;
+    }
+  };
 
   return (
     <div className="flex flex-col">
@@ -61,35 +84,28 @@ function Books(props) {
           disabled={Boolean(searchValue)}
         />
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">
-        {data.map((book) => (
-          <div className="p-3" key={book.id}>
-            <Card book={book} />
-          </div>
-        ))}
-      </div>
+      {renderResult()}
     </div>
   );
 }
 
 export async function getServerSideProps({ query }) {
-  try {
-    const { categoryId, page, size } = query;
+  const queryClient = new QueryClient();
 
-    const queries = new URLSearchParams({
-      categoryId: categoryId,
-      page: page || 0,
-      size: size || 10,
-    });
+  const { categoryId, page, size } = query;
 
-    const books = await fetchBooks(queries.toString());
+  const queries = new URLSearchParams({
+    categoryId: categoryId,
+    page: page || 0,
+    size: size || 10,
+  });
 
-    return { props: { books } };
-  } catch (error) {
-    console.error(error);
-    return { props: { books: [] } };
-  }
+  await queryClient.prefetchQuery({
+    queryKey: ["books", categoryId, page],
+    queryFn: () => fetchBooks(queries.toString()),
+  });
+
+  return { props: { dehydratedState: dehydrate(queryClient) } };
 }
 
 export default Books;
