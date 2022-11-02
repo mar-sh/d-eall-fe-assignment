@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useQuery, dehydrate, QueryClient } from "@tanstack/react-query";
 
@@ -93,8 +94,28 @@ function Books(props) {
   };
 
   return (
-    <div className="flex flex-col">
-      <div className="flex flex-col items-center md:flex-row md:justify-between">
+    <div className="flex flex-col py-10 px-20">
+      <div className="mb-4">
+        <NextLink href="/categories" className="inline-flex items-center mb-2">
+          <svg
+            aria-hidden="true"
+            className="mr-2 w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fillRule="evenodd"
+              d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z"
+              clipRule="evenodd"
+            ></path>
+          </svg>
+          Back to Categories
+        </NextLink>
+
+        <hr />
+      </div>
+      <div className="flex flex-col items-center md:flex-row md:justify-between mb-6">
         <InputFilter
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}

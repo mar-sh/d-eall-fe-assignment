@@ -11,7 +11,13 @@ const BookmarkPage = () => {
     return <div>You don&lsquot have any books in your bookmark section.</div>;
 
   return (
-    <div>
+    <div className="py-10 px-20">
+      <div className="mb-4">
+        <h1 className="text-bold text-4xl mb-2">My Bookmark</h1>
+
+        <hr />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-2">
         {bookmark.map((book) => (
           <div className="p-3" key={book.id}>
