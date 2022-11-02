@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import { BookmarkIcon, BookmarkSquareIcon } from "@heroicons/react/24/solid";
 
 function Card({ book, onBookmark, bookmarked }) {
   return (
@@ -24,7 +25,17 @@ function Card({ book, onBookmark, bookmarked }) {
             disabled={bookmarked}
             className=" inline-block px-6 py-2.5 bg-gray-800 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-gray-700 hover:shadow-lg focus:bg-gray-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-gray-800 active:shadow-lg transition duration-150 ease-in-out"
           >
-            {bookmarked ? "Bookmarked" : "Bookmark"}
+            {bookmarked ? (
+              <div className="inline-flex items-center">
+                <span className="mr-2">Bookmarked</span>{" "}
+                <BookmarkSquareIcon className="h-4 w-4" />
+              </div>
+            ) : (
+              <div className="inline-flex items-center">
+                <span className="mr-2">Bookmark</span>{" "}
+                <BookmarkIcon className="h-4 w-4" />
+              </div>
+            )}
           </button>
         </div>
       </div>

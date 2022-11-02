@@ -65,11 +65,15 @@ function Books(props) {
 
   const renderResult = () => {
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <div className="text-center text-2xl">Loading...</div>;
     }
 
     if (isError) {
-      return <div>Something has gone wrong. Please try again later</div>;
+      return (
+        <div className="text-center text-2xl">
+          Something has gone wrong. Please try again later.
+        </div>
+      );
     }
 
     if (data.length > 0) {
