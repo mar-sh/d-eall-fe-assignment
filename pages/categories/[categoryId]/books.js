@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import Card from "../../../components/card";
 import Pagination from "../../../components/pagination";
+import InputFilter from "../../../components/inputFilter";
 
 import { BASE_URL } from "../../../utils/config";
 
@@ -31,7 +32,8 @@ function Books(props) {
 
   return (
     <div className="flex flex-col">
-      <div className="flex ">
+      <div className="flex flex-col items-center md:flex-row md:justify-between">
+        <InputFilter />
         <Pagination currentPage={Number(queries.page) + 1} />
       </div>
 
