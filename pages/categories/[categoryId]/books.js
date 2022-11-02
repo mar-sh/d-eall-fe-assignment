@@ -25,7 +25,9 @@ function Books(props) {
 
   const [queries, setQueries] = useState(query);
   const [searchValue, setSearchValue] = useState("");
-  const [bookmark, setBookmark] = useState(JSON.parse(props.initialBookmark));
+  const [bookmark, setBookmark] = useState(() =>
+    JSON.parse(props.initialBookmark)
+  );
 
   const { isLoading, isError, data } = useQuery({
     queryKey: ["books", queries.categoryId, queries.page],
@@ -50,15 +52,24 @@ function Books(props) {
   };
 
   const onBookmark = (book) => {
-    if (props.initialBookmark) {
-      const bookmark = JSON.parse(props.initialBookmark);
-      const addedBookmark = [...bookmark, book];
+    const { id, title, description, cover_url, author } = book;
+    const bookmarked = {
+      id,
+      title,
+      description,
+      cover_url,
+      author,
+    };
+
+    if (bookmark && bookmark.length > 0) {
+      const addedBookmark = bookmark.concat(bookmarked);
 
       setBookmark(addedBookmark);
+
       Cookie.set("bookmark", JSON.stringify(addedBookmark));
     } else {
-      setBookmark([book]);
-      Cookie.set("bookmark", JSON.stringify([book]));
+      setBookmark([bookmarked]);
+      Cookie.set("bookmark", JSON.stringify([bookmarked]));
     }
   };
 
