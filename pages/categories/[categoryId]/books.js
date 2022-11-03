@@ -98,7 +98,7 @@ function Books(props) {
   };
 
   return (
-    <div className="flex flex-col p-10 md:px-20">
+    <div className="flex flex-col page">
       <div className="mb-4">
         <NextLink href="/categories" className="inline-flex items-center mb-2">
           <svg
