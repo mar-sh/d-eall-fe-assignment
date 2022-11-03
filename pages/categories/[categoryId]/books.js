@@ -65,12 +65,12 @@ function Books(props) {
 
   const renderResult = () => {
     if (isLoading) {
-      return <div className="text-center text-2xl">Loading...</div>;
+      return <div className="wrapper-no-items">Loading...</div>;
     }
 
     if (isError) {
       return (
-        <div className="text-center text-2xl">
+        <div className="wrapper-no-items">
           Something has gone wrong. Please try again later.
         </div>
       );

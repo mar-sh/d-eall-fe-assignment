@@ -1,5 +1,6 @@
-import dynamic from "next/dynamic";
 import React from "react";
+import NextLink from "next/link";
+import dynamic from "next/dynamic";
 
 import useBookmarkStore from "../../store/bookmark";
 import Card from "../../components/card";
@@ -8,7 +9,14 @@ const BookmarkPage = () => {
   const bookmark = useBookmarkStore((state) => state.bookmarks);
 
   if (!bookmark.length)
-    return <div>You don&lsquot have any books in your bookmark section.</div>;
+    return (
+      <div className="wrapper-no-items flex flex-col items-center">
+        <span className="mb-4">You don&apos;t have any books in your bookmark section.</span>
+        <NextLink href="/categories" className="button bg-gray-800">
+          Browse Books
+        </NextLink>
+      </div>
+    );
 
   return (
     <div className="page">
