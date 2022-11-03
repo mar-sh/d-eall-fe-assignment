@@ -6,11 +6,11 @@ function Pagination({ onNextPage, onPreviousPage, currentPage, disabled }) {
       <button
         onClick={onPreviousPage}
         disabled={disabled || Number(currentPage) - 1 < 1}
-        className="inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        className="inline-flex items-center py-2 px-4 mr-3 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
       >
         <svg
           aria-hidden="true"
-          className="mr-2 w-5 h-5"
+          className="mr-2 w-4 h-4"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
@@ -21,19 +21,19 @@ function Pagination({ onNextPage, onPreviousPage, currentPage, disabled }) {
             clipRule="evenodd"
           ></path>
         </svg>
-        Previous Page
+        Previous
       </button>
 
-      <span className="mr-3 text-lg text-bold">Page {currentPage}</span>
+      <span className="mr-3 text-sm md:text-lg text-bold">Page:{currentPage}</span>
       <button
         onClick={onNextPage}
         disabled={disabled}
-        className="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+        className="inline-flex items-center py-2 px-4 text-sm font-medium text-gray-500 bg-white rounded-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white disabled:cursor-not-allowed"
       >
-        Next Page
+        Next
         <svg
           aria-hidden="true"
-          className="ml-2 w-5 h-5"
+          className="ml-2 w-4 h-4"
           fill="currentColor"
           viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"

@@ -11,7 +11,7 @@ const BookmarkPage = () => {
     return <div>You don&lsquot have any books in your bookmark section.</div>;
 
   return (
-    <div className="py-10 px-20">
+    <div className="p-10 md:px-20">
       <div className="mb-4">
         <h1 className="text-bold text-4xl mb-2">My Bookmark</h1>
 

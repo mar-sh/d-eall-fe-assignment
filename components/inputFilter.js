@@ -2,7 +2,7 @@ import React from "react";
 
 function InputFilter({ value, onChange }) {
   return (
-    <form className="w-full sm:max-w-sm md:max-w-md lg:max-w-lg">
+    <form className="w-full max-w-sm md:max-w-md lg:max-w-lg">
       <label className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-gray-300">
         Search
       </label>

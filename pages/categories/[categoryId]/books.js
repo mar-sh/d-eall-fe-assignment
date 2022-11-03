@@ -98,7 +98,7 @@ function Books(props) {
   };
 
   return (
-    <div className="flex flex-col py-10 px-20">
+    <div className="flex flex-col p-10 md:px-20">
       <div className="mb-4">
         <NextLink href="/categories" className="inline-flex items-center mb-2">
           <svg
@@ -120,16 +120,21 @@ function Books(props) {
         <hr />
       </div>
       <div className="flex flex-col items-center md:flex-row md:justify-between mb-6">
-        <InputFilter
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-        />
-        <Pagination
-          onNextPage={onNextPage}
-          onPreviousPage={onPreviousPage}
-          currentPage={Number(queries.page) + 1}
-          disabled={Boolean(searchValue)}
-        />
+        <div className="w-full mb-4 md:mb-0">
+          <InputFilter
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+          />
+        </div>
+
+        <div>
+          <Pagination
+            onNextPage={onNextPage}
+            onPreviousPage={onPreviousPage}
+            currentPage={Number(queries.page) + 1}
+            disabled={Boolean(searchValue)}
+          />
+        </div>
       </div>
       {renderResult()}
     </div>

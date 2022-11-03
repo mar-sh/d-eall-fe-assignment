@@ -17,7 +17,7 @@ function CategoriesPage() {
     queryFn: fetchCategories,
   });
   return (
-    <div className="py-10 px-20">
+    <div className="p-10 md:px-20">
       <div className="mb-4">
         <h1 className="text-bold text-4xl mb-2">Browse Categories</h1>
 
