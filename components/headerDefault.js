@@ -23,7 +23,7 @@ const HeaderDefault = () => {
           href="/"
         >
           <span className="text-2xl pl-2">
-            <i className="em em-grinning"></i> B3K3N
+            <i className="em em-grinning"></i> B3K3N-Books
           </span>
         </NextLink>
       </div>
