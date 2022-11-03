@@ -11,7 +11,7 @@ const BookmarkPage = () => {
   if (!bookmark.length)
     return (
       <div className="wrapper-no-items flex flex-col items-center">
-        <span className="mb-4">You don&apos;t have any books in your bookmark section.</span>
+        <span className="mb-4">You don&apos;t have any books in your bookmark section yet.</span>
         <NextLink href="/categories" className="button bg-gray-800">
           Browse Books
         </NextLink>
